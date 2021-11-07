@@ -1,5 +1,13 @@
 #!/usr/bin/env bash
+set -e
 
 cd ruby
-bundle exec srb tc
-bundle exec rubocop
+
+echo "Sorbet typecheck"
+echo "----------------"
+bundle exec srb tc 2>&1
+
+echo
+echo "Rubocop"
+echo "----------------"
+bundle exec rubocop 2>&1
