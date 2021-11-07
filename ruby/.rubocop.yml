@@ -6,3 +6,6 @@ Style/MixinUsage:
 
 Naming/MethodParameterName:
   Enabled: false
+
+Style/NegatedIf:
+  Enabled: false
