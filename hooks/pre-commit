@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+cd ruby
+bundle exec srb tc
+bundle exec rubocop
