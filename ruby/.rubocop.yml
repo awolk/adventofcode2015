@@ -10,3 +10,9 @@ Naming/MethodParameterName:
 
 Style/NegatedIf:
   Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Metrics/AbcSize:
+  Enabled: false

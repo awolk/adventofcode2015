@@ -4,7 +4,6 @@
 require_relative './aoc'
 extend T::Sig
 
-# A cubic present
 class Cube < T::Struct
   extend T::Sig
   const :l, Integer
