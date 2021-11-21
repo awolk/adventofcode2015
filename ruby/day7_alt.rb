@@ -35,9 +35,9 @@ module Day7Alt
   line_parser =
     P.seq(expr_parser, P.str(' -> '), P.regexp(/[a-z]+/))
      .map { |expr, _, target| [target, expr] }
-  program_parser = P.delimited(line_parser, P.str("\n")).complete
+  program_parser = line_parser.each_line.map(&:to_h)
 
-  wiring = T.let(program_parser.parse(AOC.get_input(7)).first.to_h, T::Hash[String, Expr])
+  wiring = T.let(program_parser.parse_all(AOC.get_input(7)), T::Hash[String, Expr])
 
   class Circuit
     extend T::Sig

@@ -73,6 +73,20 @@ module P
       end
     end
 
+    # Parse self delimited by delimiter
+    sig { params(delimiter: Parser).returns(Parser) }
+    def delimited(delimiter)
+      (self & (delimiter >> self).repeated)
+        .map { |hd, tl| [hd] + tl }
+        .optional
+    end
+
+    # Parse self on each line of input
+    sig { returns(Parser) }
+    def each_line
+      delimited(P.str("\n"))
+    end
+
     # Parse self or nothing
     sig { returns(Parser) }
     def optional
@@ -83,15 +97,12 @@ module P
       end
     end
 
-    # Parse self if it consumes the entire input string
-    sig { returns(Parser) }
-    def complete
-      Parser.new do |i|
-        res, rest = parse(i)
-        raise ParserError, 'Expected complete parsing' unless rest.empty?
+    sig { params(i: String).returns(T.untyped) }
+    def parse_all(i)
+      res, rest = parse(i)
+      raise ParserError, 'Expected complete parsing' unless rest.empty?
 
-        [res, rest]
-      end
+      res
     end
   end
 
@@ -119,6 +130,11 @@ module P
     regexp(/\d+/).map(&:to_i)
   end
 
+  sig { returns(Parser) }
+  def self.word
+    regexp(/\w+/)
+  end
+
   sig { params(parsers: Parser).returns(Parser) }
   def self.seq(*parsers)
     Parser.new do |i|
@@ -130,12 +146,5 @@ module P
       end
       [results, rest]
     end
-  end
-
-  sig { params(item: Parser, delimiter: Parser).returns(Parser) }
-  def self.delimited(item, delimiter)
-    (item & (delimiter >> item).repeated)
-      .map { |hd, tl| [hd] + tl }
-      .optional
   end
 end
