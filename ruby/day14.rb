@@ -24,9 +24,9 @@ class Reindeer
 
   sig { params(line: String).returns(Reindeer) }
   def self.from_line(line)
-    P.seq(P.word, P.str(' can fly '), P.int, P.str(' km/s for '), P.int,
-          P.str(' seconds, but then must rest for '), P.int, P.str(' seconds.'))
-     .map {new(name: _1, speed: _3, speed_time: _5, rest_time: _7)}
+    P.seq(P.word, ' can fly ', P.int, ' km/s for ', P.int,
+          ' seconds, but then must rest for ', P.int, ' seconds.')
+     .map {new(name: _1, speed: _2, speed_time: _3, rest_time: _4)}
      .parse_all(line)
   end
 

@@ -127,7 +127,7 @@ module P
 
   sig { returns(Parser) }
   def self.int
-    regexp(/\d+/).map(&:to_i)
+    regexp(/-?\d+/).map(&:to_i)
   end
 
   sig { returns(Parser) }
@@ -135,14 +135,19 @@ module P
     regexp(/\w+/)
   end
 
-  sig { params(parsers: Parser).returns(Parser) }
+  # Sequence of parsers in order. Drops raw string results
+  sig { params(parsers: T.any(Parser, String)).returns(Parser) }
   def self.seq(*parsers)
     Parser.new do |i|
       results = []
       rest = i
       parsers.each do |p|
-        res, rest = p.parse(rest)
-        results << res
+        if p.is_a?(String)
+          _, rest = str(p).parse(rest)
+        else
+          res, rest = p.parse(rest)
+          results << res
+        end
       end
       [results, rest]
     end
